@@ -12,6 +12,7 @@
 #include "module/sequencer.h"
 #include "module/scheduler.h"
 #include "module/ticker.h"
+#include "module/dynamic_remasterer.h"
 #include "proto/api.pb.h"
 
 using std::to_string;
@@ -135,6 +136,10 @@ void TestSlog::AddMultiHomeOrderer() {
   multi_home_orderer_ = MakeRunnerFor<MultiHomeOrderer>(config_, broker_);
 }
 
+void TestSlog::AddDynamicRemasterer() {
+  dynamic_remasterer_ = MakeRunnerFor<DynamicRemasterer>(config_, broker_);
+}
+
 void TestSlog::AddChannel(const string& name) {
   broker_->AddChannel(name);
 
@@ -188,6 +193,9 @@ void TestSlog::StartInNewThreads() {
   }
   if (multi_home_orderer_) {
     multi_home_orderer_->StartInNewThread();
+  }
+  if (dynamic_remasterer_) {
+    dynamic_remasterer_->StartInNewThread();
   }
 }
 

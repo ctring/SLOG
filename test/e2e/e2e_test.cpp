@@ -32,6 +32,7 @@ protected:
       test_slogs[i]->AddSequencer();
       test_slogs[i]->AddScheduler();
       test_slogs[i]->AddLocalPaxos();
+      test_slogs[i]->AddDynamicRemasterer();
 
       // Only one partition per replica participates in the global paxos process
       if (configs[i]->GetLeaderPartitionForMultiHomeOrdering() 
@@ -178,6 +179,25 @@ TEST_F(E2ETest, AbortTxn) {
   ASSERT_EQ(TransactionType::SINGLE_HOME, txn_resp.internal().type());
   // Value of B must not change because the previous txn was aborted
   ASSERT_EQ("valB", txn_resp.read_set().at("B"));
+}
+
+TEST_F(E2ETest, DynamicRemaster) {
+  for (auto i = 0; i < 3; i++) {
+    // Multi-partition transaction where one of the partition will abort
+    auto txn = MakeTransaction(
+        {"A"}, /* read_set */
+        {},  /* write_set */
+        "", /* code */
+        {} /* master metadata */
+    );
+
+    test_slogs[2]->SendTxn(txn);
+    auto txn_resp = test_slogs[2]->RecvTxnResult();
+    ASSERT_EQ(TransactionStatus::COMMITTED, txn_resp.status());
+    ASSERT_EQ(TransactionType::SINGLE_HOME, txn_resp.internal().type());
+  }
+
+  // auto txn_resp = test_slogs[2]->RecvTxnResult();
 }
 
 int main(int argc, char* argv[]) {

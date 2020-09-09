@@ -46,6 +46,7 @@ public:
   void AddLocalPaxos();
   void AddGlobalPaxos();
   void AddMultiHomeOrderer();
+  void AddDynamicRemasterer();
 
   void AddChannel(const string& name);
   zmq::pollitem_t GetPollItemForChannel(const string& name);
@@ -69,6 +70,7 @@ private:
   ModuleRunnerPtr local_paxos_;
   ModuleRunnerPtr global_paxos_;
   ModuleRunnerPtr multi_home_orderer_;
+  ModuleRunnerPtr dynamic_remasterer_;
 
   unordered_map<string, zmq::socket_t> channels_;
 

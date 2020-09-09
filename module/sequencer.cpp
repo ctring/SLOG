@@ -201,6 +201,18 @@ void Sequencer::PutSingleHomeTransactionIntoBatch(Transaction* txn) {
       || txn->internal().type() == TransactionType::LOCK_ONLY)
       << "Sequencer batch can only contain single-home or lock-only txn. "
       << "Multi-home txn or unknown txn type received instead.";
+
+  {
+    if (txn->procedure_case() != Transaction::kRemaster) {
+      VLOG(3) << "Sending transaction to dynamic remasterer";
+      internal::Request req;
+      auto forward = req.mutable_forward_txn();
+      forward->set_allocated_txn(txn);
+      Send(req, DYNAMIC_REMASTERER_CHANNEL);
+      forward->release_txn();
+    }
+  }
+
   batch_->mutable_transactions()->AddAllocated(txn);
 }
 

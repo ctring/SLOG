@@ -20,6 +20,7 @@ target_link_libraries(scheduler_components common string_utils)
 
 add_library(module
   consensus.cpp
+  dynamic_remasterer.cpp
   forwarder.cpp
   multi_home_orderer.cpp
   server.cpp

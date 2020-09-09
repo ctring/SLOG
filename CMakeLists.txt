@@ -9,6 +9,7 @@ include(CTest)
 
 option(BUILD_CLIENT "Build the client" ON)
 set(REMASTER_PROTOCOL SIMPLE CACHE STRING "Protocol for remastering")
+option(ENABLE_DYNAMIC_REMASTER "Automatically remaster based on access patterns" OFF)
 option(ENABLE_REPLICATION_DELAY "Delay transaction batches in the sequencer" OFF)
 
 # Note: BUILD_TESTING is defined by CTest
@@ -25,6 +26,10 @@ elseif(REMASTER_PROTOCOL STREQUAL "COUNTERLESS")
   add_compile_definitions(REMASTER_PROTOCOL_COUNTERLESS)
 else()
   message(FATAL_ERROR "Invalid REMASTER_PROTOCOL")
+endif()
+
+if(ENABLE_DYNAMIC_REMASTER)
+    add_compile_definitions(ENABLE_DYNAMIC_REMASTER)
 endif()
 
 if(ENABLE_REPLICATION_DELAY)

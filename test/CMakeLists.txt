@@ -9,6 +9,7 @@ set(ALL_TESTS
   concurrent_hash_map_test
   deterministic_lock_manager_test
   deterministic_lock_manager_deprecated_test
+  dynamic_remasterer_test
   e2e_test
   forwarder_test
   mem_only_storage_test
@@ -45,6 +46,9 @@ target_link_libraries(deterministic_lock_manager_test test_utils)
 add_executable(deterministic_lock_manager_deprecated_test 
   module/scheduler_components/deterministic_lock_manager_deprecated_test.cpp)
 target_link_libraries(deterministic_lock_manager_deprecated_test test_utils)
+
+add_executable(dynamic_remasterer_test module/dynamic_remasterer_test.cpp)
+target_link_libraries(dynamic_remasterer_test test_utils)
 
 add_executable(e2e_test e2e/e2e_test.cpp)
 target_link_libraries(e2e_test test_utils)

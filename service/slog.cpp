@@ -133,9 +133,13 @@ int main(int argc, char* argv[]) {
   #error "Remaster protocol not defined"
 #endif /* REMASTER_PROTOCOL_SIMPLE */
 
+#ifdef ENABLE_DYNAMIC_REMASTER
+  LOG(INFO) << "Dynamic remastering enabled";
+#endif /* ENABLE_DYNAMIC_REMASTER */
+
 #ifdef ENABLE_REPLICATION_DELAY
   LOG(INFO) << "Replication delay enabled";
-#endif /* GetReplicationDelayEnabled */
+#endif /* ENABLE_REPLICATION_DELAY */
 
   auto config = slog::Configuration::FromFile(
       FLAGS_config, 
